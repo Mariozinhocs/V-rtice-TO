@@ -38,11 +38,16 @@ export function App() {
   const [isHostingerConnected, setIsHostingerConnected] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<AgentStatus | 'todos'>('todos');
   const [detailsAgentId, setDetailsAgentId] = useState<string | null>(null);
+  const [focusedRouteAgentId, setFocusedRouteAgentId] = useState<string | null>(null);
 
   // Expor função global para o tooltip do Leaflet acessar o estado do React
   useEffect(() => {
     (window as any).openAgentDetails = (agentId: string) => {
       setDetailsAgentId(agentId);
+    };
+    (window as any).focusAgentRoute = (agentId: string) => {
+      setFocusedRouteAgentId(agentId);
+      setSelectedAgentId(agentId);
     };
   }, []);
 
@@ -284,42 +289,64 @@ export function App() {
     );
   }
 
-  const filteredAgents = statusFilter === 'todos' ? agents : agents.filter(a => a.status === statusFilter);
+  const filteredAgents = focusedRouteAgentId 
+    ? agents.filter(a => a.id === focusedRouteAgentId)
+    : (statusFilter === 'todos' ? agents : agents.filter(a => a.status === statusFilter));
+
+  const filteredObjectives = focusedRouteAgentId
+    ? objectives.filter(o => o.assigned_agent_id === focusedRouteAgentId)
+    : objectives;
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#090d16] text-[#f8fafc] font-sans">
-      <Navbar
-        agents={agents}
-        statusFilter={statusFilter}
-        onStatusFilterChange={setStatusFilter}
-        isSimulating={isSimulating}
-        onToggleSimulation={() => setIsSimulating(!isSimulating)}
-        onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
-        onOpenShareLinkModal={() => setIsShareLinkOpen(true)}
-        isHostingerConnected={isHostingerConnected}
-      />
+      {!focusedRouteAgentId && (
+        <Navbar
+          agents={agents}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+          isSimulating={isSimulating}
+          onToggleSimulation={() => setIsSimulating(!isSimulating)}
+          onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
+          onOpenShareLinkModal={() => setIsShareLinkOpen(true)}
+          isHostingerConnected={isHostingerConnected}
+        />
+      )}
 
       <div className="flex-1 flex overflow-hidden relative">
-        <SidebarPanel
-          agents={filteredAgents}
-          objectives={objectives}
-          selectedAgentId={selectedAgentId}
-          onSelectAgent={handleSelectAgent}
-          onDoubleClickAgent={handleDoubleClickAgent}
-          onApproveAgent={handleApproveAgent}
-          onRejectAgent={handleRejectAgent}
-          onTriggerSOSMock={handleTriggerSOSMock}
-          onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
-          onLogout={handleLogout}
-        />
+        {!focusedRouteAgentId && (
+          <SidebarPanel
+            agents={filteredAgents}
+            objectives={filteredObjectives}
+            selectedAgentId={selectedAgentId}
+            onSelectAgent={handleSelectAgent}
+            onDoubleClickAgent={handleDoubleClickAgent}
+            onApproveAgent={handleApproveAgent}
+            onRejectAgent={handleRejectAgent}
+            onTriggerSOSMock={handleTriggerSOSMock}
+            onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
+            onLogout={handleLogout}
+          />
+        )}
 
         <div className="flex-1 h-full relative">
+          {focusedRouteAgentId && (
+            <div className="absolute top-4 left-4 z-[400]">
+              <button 
+                onClick={() => setFocusedRouteAgentId(null)} 
+                className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 border-2 border-red-500/80 text-white rounded-xl font-bold shadow-2xl flex items-center gap-2 transition-all group"
+              >
+                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                SAIR DO MODO DE FOCO
+              </button>
+            </div>
+          )}
+
           <MapControl
             agents={filteredAgents}
             selectedAgentId={selectedAgentId}
             onSelectAgent={handleSelectAgent}
             onHoverAgent={handleHoverAgent}
-            objectives={objectives}
+            objectives={filteredObjectives}
             flyToCoords={flyToCoords}
             statusFilter={statusFilter}
           />

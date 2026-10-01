@@ -145,24 +145,27 @@ export const MapControl: React.FC<MapControlProps> = ({
         iconAnchor: [10, 10]
       });
 
-      // Detalhamento da Missão Atual ou Status do Agente para o Tooltip
+      // Detalhamento da Missão Atual ou Status do Agente para o Tooltip/Popup
       let missionDetailHtml = `<div class="text-emerald-400 font-bold">🟢 STATUS: AGENTE LIVRE</div>`;
       if (agent.objetivo_atual_id) {
         const currentObj = objectives.find(o => o.id === agent.objetivo_atual_id);
         if (currentObj) {
           missionDetailHtml = `
-            <div class="text-cyan-300 font-bold">🎯 MISSÃO ATUAL:</div>
+            <div class="text-cyan-300 font-bold text-[10px]">🎯 MISSÃO ATUAL:</div>
             <div class="text-white font-sans text-[11px] font-semibold mt-0.5">${currentObj.passageiro_nome}</div>
-            <div class="text-[10px] text-slate-400">Status: <strong class="text-amber-400 uppercase">${agent.status}</strong></div>
+            <div class="text-[10px] text-slate-400 mb-2 mt-1">Destino: <strong class="text-white">Aeroporto (Manaus)</strong></div>
+            <button onclick="window.focusAgentRoute('${agent.id}')" class="w-full mb-2 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded font-mono text-[10px] font-bold transition-colors cursor-pointer pointer-events-auto shadow-lg">
+              🎯 ISOLAR E FOCAR NA ROTA
+            </button>
           `;
         }
       } else if (agent.status === 'sos') {
         missionDetailHtml = `<div class="text-red-400 font-bold animate-pulse">🚨 ALERTA DE EMERGÊNCIA SOS</div>`;
       }
 
-        // Tooltip HTML com alto contraste escuro
+        // Popup HTML com alto contraste escuro
         const tooltipHtml = `
-          <div class="p-2 font-sans bg-[#0f172a] text-slate-100 min-w-[210px] rounded-lg shadow-2xl border border-slate-700">
+          <div class="font-sans text-slate-100 min-w-[210px]">
             <div class="flex items-center justify-between gap-2 border-b border-slate-700 pb-1.5 mb-2">
               <span class="font-bold text-white text-xs">${agent.nome}</span>
               <span class="font-mono text-[10px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800 font-bold">${agent.matricula}</span>
@@ -196,10 +199,16 @@ export const MapControl: React.FC<MapControlProps> = ({
         if (existingMarker) {
           existingMarker.setLatLng([agent.latitude, agent.longitude]);
           existingMarker.setIcon(customIcon);
-          existingMarker.getTooltip()?.setContent(tooltipHtml);
+          
+          // Mantém o popup atualizado se estiver aberto
+          if (existingMarker.isPopupOpen()) {
+            existingMarker.getPopup()?.setContent(tooltipHtml);
+          } else {
+            existingMarker.setPopupContent(tooltipHtml);
+          }
         } else {
           const newMarker = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
-            .bindTooltip(tooltipHtml, { direction: 'top', offset: [0, -10], opacity: 0.98, interactive: true });
+            .bindPopup(tooltipHtml, { offset: [0, -10], className: 'custom-agent-popup', minWidth: 220, closeButton: false });
 
         // Evento de clique para selecionar
         newMarker.on('click', () => {
