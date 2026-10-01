@@ -13,8 +13,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onSwitchToAgentView,
   onOpenWhatsAppRegister
 }) => {
-  const [email, setEmail] = useState('admin@vertice.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleAdminSubmit = (e: React.FormEvent) => {
@@ -24,15 +24,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
-    if (email === 'admin@vertice.com' && password === 'admin123') {
+    if (email === 'mariozinhocs' && password === '20042009') {
       onLoginSuccess({
         id: 'admin-1',
-        nome: 'Administrador de Operações',
+        nome: 'Mario Henrique',
         email: email,
         role: 'admin'
       });
     } else {
-      setError('Credenciais inválidas. Tente admin@vertice.com / admin123');
+      setError('Credenciais inválidas. Tente mariozinhocs / 20042009');
     }
   };
 
@@ -68,7 +68,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         <form onSubmit={handleAdminSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 font-mono">
-              E-MAIL DO ADMINISTRADOR
+              USUÁRIO ADM
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Agent } from '../types';
-import { X, Activity, Clock, Map, TrendingUp, Calendar, Zap } from 'lucide-react';
+import { X, Activity, Clock, Map, TrendingUp, Calendar, Zap, MessageCircle } from 'lucide-react';
 
 interface AgentDetailsModalProps {
   agent: Agent;
@@ -24,22 +24,35 @@ export const AgentDetailsModal: React.FC<AgentDetailsModalProps> = ({ agent, isO
         className="bg-[#0f172a] border border-slate-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/50">
+          <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center font-bold text-cyan-400 font-mono">
               {agent.matricula.replace('AG-', '')}
             </div>
             <div>
               <h2 className="text-white font-bold text-lg leading-tight">{agent.nome}</h2>
-              <p className="text-xs text-slate-400 font-mono">{agent.matricula} • {agent.equipe || 'Equipe Geral'}</p>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">
+                {agent.matricula} • CPF: {agent.cpf || 'Não informado'} • {agent.equipe || 'Equipe Geral'}
+              </p>
             </div>
           </div>
-          <button 
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <a 
+              href={`https://api.whatsapp.com/send?phone=${agent.telefone.replace(/\D/g, '')}&text=${encodeURIComponent(`Olá ${agent.nome}, aqui é da Central Vértice-TO.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 transition-colors"
+              title="Contatar via WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
+            </a>
+            <button 
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-5 flex-1 overflow-y-auto">

@@ -13,7 +13,8 @@ export const ShareLinkModal: React.FC<ShareLinkModalProps> = ({ isOpen, onClose 
 
   // URL pública direta para o formulário de cadastro de agentes
   const baseUrl = window.location.origin + window.location.pathname;
-  const registerUrl = `${baseUrl}?action=register`;
+  const dummyHash = 'a8f4c9b2e1d7f6a5b4c3d2e1f0a9b8c7';
+  const registerUrl = `${baseUrl}?action=register&token=${dummyHash}`;
 
   // Mensagem preformatada de convite via WhatsApp
   const inviteMessage = `*CONVITE DE CREDENCIAMENTO — VÉRTICE TEATRO DE OPERAÇÕES (MANAUS - AM)*\n\n` +

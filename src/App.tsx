@@ -10,7 +10,7 @@ import { DispatchModal } from './components/DispatchModal';
 import { AgentSimulatorController } from './components/AgentSimulatorController';
 import { LoginModal } from './components/LoginModal';
 import { AgentView } from './components/AgentView';
-import { WhatsAppRegisterModal } from './components/WhatsAppRegisterModal';
+import { AgentRegisterModal } from './components/AgentRegisterModal';
 import { ShareLinkModal } from './components/ShareLinkModal';
 import { AgentDetailsModal } from './components/AgentDetailsModal';
 
@@ -265,7 +265,7 @@ export function App() {
           onSwitchToAgentView={() => { setViewMode('agent_view'); localStorage.setItem(LOCAL_STORAGE_VIEW_KEY, 'agent_view'); }}
           onOpenWhatsAppRegister={() => setIsWhatsAppRegisterOpen(true)}
         />
-        <WhatsAppRegisterModal
+        <AgentRegisterModal
           isOpen={isWhatsAppRegisterOpen}
           onClose={() => setIsWhatsAppRegisterOpen(false)}
           onRegisterAgentSuccess={handleRegisterAgentSuccess}
@@ -373,7 +373,7 @@ export function App() {
         onDispatchObjective={handleDispatchObjective}
       />
 
-      <WhatsAppRegisterModal
+      <AgentRegisterModal
         isOpen={isWhatsAppRegisterOpen}
         onClose={() => setIsWhatsAppRegisterOpen(false)}
         onRegisterAgentSuccess={handleRegisterAgentSuccess}

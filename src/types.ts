@@ -14,6 +14,8 @@ export interface Agent {
   id: string;
   matricula: string;
   nome: string;
+  cpf?: string;
+  senha?: string;
   telefone: string;
   status: AgentStatus;
   status_conexao: ConnectionStatus;
