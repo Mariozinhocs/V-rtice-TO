@@ -234,7 +234,12 @@ export function App() {
   const handleLoginSuccess = (user: AuthUser) => {
     setCurrentUser(user);
     localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(user));
-    setViewMode('admin_dashboard');
+    if (user.role === 'agent') {
+      setSelectedAgentId(user.id);
+      setViewMode('agent_view');
+    } else {
+      setViewMode('admin_dashboard');
+    }
   };
 
   const handleLogout = () => {
@@ -262,6 +267,7 @@ export function App() {
     return (
       <>
         <LoginModal
+          agents={agents}
           onLoginSuccess={handleLoginSuccess}
           onSwitchToAgentView={() => { setViewMode('agent_view'); localStorage.setItem(LOCAL_STORAGE_VIEW_KEY, 'agent_view'); }}
           onOpenWhatsAppRegister={() => setIsWhatsAppRegisterOpen(true)}

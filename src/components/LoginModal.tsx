@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Shield, Lock, Mail, ArrowRight, Smartphone, MessageSquare, AlertCircle } from 'lucide-react';
-import { AuthUser } from '../types';
+import { AuthUser, Agent } from '../types';
 
 interface LoginModalProps {
+  agents: Agent[];
   onLoginSuccess: (user: AuthUser) => void;
   onSwitchToAgentView: () => void;
   onOpenWhatsAppRegister: () => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
+  agents,
   onLoginSuccess,
   onSwitchToAgentView,
   onOpenWhatsAppRegister
@@ -31,9 +33,26 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         email: email,
         role: 'admin'
       });
-    } else {
-      setError('Credenciais inválidas. Verifique seu login e senha.');
+      return;
+    } 
+    
+    // Tentar login como Agente (Login = CPF, Senha = Senha)
+    const agent = agents.find(a => a.cpf === email && a.senha === password);
+    if (agent) {
+      if (!agent.validado) {
+        setError('Seu cadastro está pendente de aprovação pelo Administrador.');
+        return;
+      }
+      onLoginSuccess({
+        id: agent.id,
+        nome: agent.nome,
+        email: agent.cpf || '',
+        role: 'agent'
+      });
+      return;
     }
+
+    setError('Credenciais inválidas. Verifique seu login e senha.');
   };
 
   return (
