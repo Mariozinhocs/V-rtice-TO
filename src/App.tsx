@@ -12,6 +12,7 @@ import { LoginModal } from './components/LoginModal';
 import { AgentView } from './components/AgentView';
 import { WhatsAppRegisterModal } from './components/WhatsAppRegisterModal';
 import { ShareLinkModal } from './components/ShareLinkModal';
+import { AgentDetailsModal } from './components/AgentDetailsModal';
 
 const LOCAL_STORAGE_VIEW_KEY = 'vertice_to_view_mode';
 const LOCAL_STORAGE_USER_KEY = 'vertice_to_current_user';
@@ -36,6 +37,14 @@ export function App() {
   const [isShareLinkOpen, setIsShareLinkOpen] = useState<boolean>(false);
   const [isHostingerConnected, setIsHostingerConnected] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<AgentStatus | 'todos'>('todos');
+  const [detailsAgentId, setDetailsAgentId] = useState<string | null>(null);
+
+  // Expor função global para o tooltip do Leaflet acessar o estado do React
+  useEffect(() => {
+    (window as any).openAgentDetails = (agentId: string) => {
+      setDetailsAgentId(agentId);
+    };
+  }, []);
 
   // Estado de Autenticação com persistência para F5
   const [viewMode, setViewMode] = useState<'login' | 'admin_dashboard' | 'agent_view'>(() => {
@@ -344,6 +353,14 @@ export function App() {
         isOpen={isShareLinkOpen}
         onClose={() => setIsShareLinkOpen(false)}
       />
+
+      {detailsAgentId && (
+        <AgentDetailsModal
+          agent={agents.find(a => a.id === detailsAgentId)!}
+          isOpen={!!detailsAgentId}
+          onClose={() => setDetailsAgentId(null)}
+        />
+      )}
     </div>
   );
 }

@@ -160,43 +160,46 @@ export const MapControl: React.FC<MapControlProps> = ({
         missionDetailHtml = `<div class="text-red-400 font-bold animate-pulse">🚨 ALERTA DE EMERGÊNCIA SOS</div>`;
       }
 
-      // Tooltip HTML com alto contraste escuro
-      const tooltipHtml = `
-        <div class="p-2 font-sans bg-[#0f172a] text-slate-100 min-w-[210px] rounded-lg shadow-2xl border border-slate-700">
-          <div class="flex items-center justify-between gap-2 border-b border-slate-700 pb-1.5 mb-2">
-            <span class="font-bold text-white text-xs">${agent.nome}</span>
-            <span class="font-mono text-[10px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800 font-bold">${agent.matricula}</span>
+        // Tooltip HTML com alto contraste escuro
+        const tooltipHtml = `
+          <div class="p-2 font-sans bg-[#0f172a] text-slate-100 min-w-[210px] rounded-lg shadow-2xl border border-slate-700">
+            <div class="flex items-center justify-between gap-2 border-b border-slate-700 pb-1.5 mb-2">
+              <span class="font-bold text-white text-xs">${agent.nome}</span>
+              <span class="font-mono text-[10px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800 font-bold">${agent.matricula}</span>
+            </div>
+            <div class="text-[11px] space-y-1 font-mono">
+              <div class="flex items-center justify-between text-slate-300">
+                <span>Equipe:</span> <strong class="text-slate-100">${agent.equipe || 'Geral'}</strong>
+              </div>
+              <div class="flex items-center justify-between text-slate-300">
+                <span>Velocidade:</span> <strong class="text-amber-400">${agent.velocidade_kmh} km/h</strong>
+              </div>
+              <div class="flex items-center justify-between text-slate-300">
+                <span>Bateria:</span> <strong class="${agent.bateria_pct < 20 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${agent.bateria_pct}%</strong>
+              </div>
+              <div class="flex items-center justify-between text-slate-400 text-[10px]">
+                <span>Atualizado:</span> <span>${agent.ultima_atualizacao}</span>
+              </div>
+
+              <div class="mt-2 pt-1.5 border-t border-slate-800">
+                ${missionDetailHtml}
+              </div>
+            </div>
+            <button onclick="window.openAgentDetails('${agent.id}')" class="w-full mt-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded font-mono text-[10px] font-bold transition-colors cursor-pointer pointer-events-auto">
+              VER RESUMO DO TURNO
+            </button>
           </div>
-          <div class="text-[11px] space-y-1 font-mono">
-            <div class="flex items-center justify-between text-slate-300">
-              <span>Equipe:</span> <strong class="text-slate-100">${agent.equipe || 'Geral'}</strong>
-            </div>
-            <div class="flex items-center justify-between text-slate-300">
-              <span>Velocidade:</span> <strong class="text-amber-400">${agent.velocidade_kmh} km/h</strong>
-            </div>
-            <div class="flex items-center justify-between text-slate-300">
-              <span>Bateria:</span> <strong class="${agent.bateria_pct < 20 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${agent.bateria_pct}%</strong>
-            </div>
-            <div class="flex items-center justify-between text-slate-400 text-[10px]">
-              <span>Atualizado:</span> <span>${agent.ultima_atualizacao}</span>
-            </div>
+        `;
 
-            <div class="mt-2 pt-1.5 border-t border-slate-800">
-              ${missionDetailHtml}
-            </div>
-          </div>
-        </div>
-      `;
+        const existingMarker = markersRef.current.get(agent.id);
 
-      const existingMarker = markersRef.current.get(agent.id);
-
-      if (existingMarker) {
-        existingMarker.setLatLng([agent.latitude, agent.longitude]);
-        existingMarker.setIcon(customIcon);
-        existingMarker.getTooltip()?.setContent(tooltipHtml);
-      } else {
-        const newMarker = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
-          .bindTooltip(tooltipHtml, { direction: 'top', offset: [0, -10], opacity: 0.98 });
+        if (existingMarker) {
+          existingMarker.setLatLng([agent.latitude, agent.longitude]);
+          existingMarker.setIcon(customIcon);
+          existingMarker.getTooltip()?.setContent(tooltipHtml);
+        } else {
+          const newMarker = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
+            .bindTooltip(tooltipHtml, { direction: 'top', offset: [0, -10], opacity: 0.98, interactive: true });
 
         // Evento de clique para selecionar
         newMarker.on('click', () => {
