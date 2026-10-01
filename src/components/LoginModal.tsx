@@ -24,7 +24,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
-    if (email === 'mariozinhocs' && password === '20042009') {
+    if (email === 'mariozinhocs' && (password === '20042009' || password === 'Mm#200409@')) {
       onLoginSuccess({
         id: 'admin-1',
         nome: 'Mario Henrique',
@@ -32,7 +32,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         role: 'admin'
       });
     } else {
-      setError('Credenciais inválidas. Tente mariozinhocs / 20042009');
+      setError('Credenciais inválidas. Verifique seu login e senha.');
     }
   };
 
@@ -68,22 +68,23 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         <form onSubmit={handleAdminSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 font-mono">
-              USUÁRIO ADM
+              LOGIN
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-sans"
+                placeholder="Login"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-sans"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 font-mono">
-              SENHA DE ACESSO
+              SENHA
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -91,7 +92,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-sans"
+                placeholder="*********"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-sans"
               />
             </div>
           </div>
