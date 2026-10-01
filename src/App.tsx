@@ -13,6 +13,7 @@ import { AgentView } from './components/AgentView';
 import { AgentRegisterModal } from './components/AgentRegisterModal';
 import { ShareLinkModal } from './components/ShareLinkModal';
 import { AgentDetailsModal } from './components/AgentDetailsModal';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 
 const LOCAL_STORAGE_VIEW_KEY = 'vertice_to_view_mode';
 const LOCAL_STORAGE_USER_KEY = 'vertice_to_current_user';
@@ -279,14 +280,17 @@ export function App() {
     const activeObj = objectives.find(o => o.assigned_agent_id === demoAgent.id && o.status !== 'concluido');
 
     return (
-      <AgentView
-        agent={demoAgent}
-        objective={activeObj}
-        notifications={notifications}
-        onCompleteObjective={handleCompleteObjective}
-        onTriggerSOS={handleTriggerSOSMock}
-        onBackToLogin={handleLogout}
-      />
+      <>
+        <PwaInstallPrompt />
+        <AgentView
+          agent={demoAgent}
+          objective={activeObj}
+          notifications={notifications}
+          onCompleteObjective={handleCompleteObjective}
+          onTriggerSOS={handleTriggerSOSMock}
+          onBackToLogin={handleLogout}
+        />
+      </>
     );
   }
 
