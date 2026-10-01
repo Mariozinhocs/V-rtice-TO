@@ -13,6 +13,7 @@ interface MapControlProps {
   isDispatchingMode?: boolean;
   flyToCoords?: { lat: number; lng: number } | null;
   statusFilter?: AgentStatus | 'todos';
+  fitBoundsTrigger?: number;
 }
 
 export const MapControl: React.FC<MapControlProps> = ({
@@ -23,13 +24,28 @@ export const MapControl: React.FC<MapControlProps> = ({
   objectives,
   onMapClick,
   flyToCoords,
-  statusFilter = 'todos'
+  statusFilter = 'todos',
+  fitBoundsTrigger
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
   const routeLinesRef = useRef<L.Polyline[]>([]);
+  const agentsRef = useRef<Agent[]>(agents);
+
+  // Atualiza agentsRef sempre que a prop agents mudar
+  useEffect(() => {
+    agentsRef.current = agents;
+  }, [agents]);
+
+  // Ajustar o zoom do mapa (Fit Bounds) quando o botão for clicado
+  useEffect(() => {
+    if (fitBoundsTrigger && fitBoundsTrigger > 0 && mapInstanceRef.current && agentsRef.current.length > 0) {
+      const bounds = L.latLngBounds(agentsRef.current.map(a => [a.latitude, a.longitude]));
+      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 16, animate: true, duration: 1.0 });
+    }
+  }, [fitBoundsTrigger]);
 
   // Inicializar o mapa Leaflet com Dark Theme Tiles e MarkerClusterGroup
   useEffect(() => {

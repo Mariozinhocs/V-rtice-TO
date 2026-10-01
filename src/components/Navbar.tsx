@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Radio, Activity, AlertTriangle, Users, Navigation, RefreshCw, Share2 } from 'lucide-react';
+import { Shield, Radio, Activity, AlertTriangle, Users, Navigation, RefreshCw, Share2, Maximize } from 'lucide-react';
 import { Agent, AgentStatus } from '../types';
 
 interface NavbarProps {
@@ -11,6 +11,7 @@ interface NavbarProps {
   onOpenDispatchModal: () => void;
   onOpenShareLinkModal: () => void;
   isHostingerConnected: boolean;
+  onFitMapBounds?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -21,7 +22,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenShareLinkModal,
   isHostingerConnected,
   statusFilter,
-  onStatusFilterChange
+  onStatusFilterChange,
+  onFitMapBounds
 }) => {
   const totalAgents = agents.length;
   const libres = agents.filter(a => a.status === 'libre').length;
@@ -51,6 +53,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Meio: KPIs & Status dos Transponders (Filtros) */}
       <div className="hidden md:flex items-center gap-4 bg-slate-900/80 px-4 py-1.5 rounded-lg border border-slate-800 font-mono text-xs">
+        <button
+          onClick={onFitMapBounds}
+          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700 shadow-sm"
+          title="Ajustar zoom do mapa para encaixar os agentes filtrados"
+        >
+          <Maximize className="w-4 h-4" />
+        </button>
+
+        <div className="w-[1px] h-4 bg-slate-800" />
+
         <div 
           onClick={() => onStatusFilterChange('todos')}
           className={`flex items-center gap-2 cursor-pointer transition-all hover:opacity-100 ${statusFilter === 'todos' ? 'opacity-100 scale-105 font-bold' : 'opacity-60'}`}

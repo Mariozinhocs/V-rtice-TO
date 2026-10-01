@@ -39,6 +39,7 @@ export function App() {
   const [statusFilter, setStatusFilter] = useState<AgentStatus | 'todos'>('todos');
   const [detailsAgentId, setDetailsAgentId] = useState<string | null>(null);
   const [focusedRouteAgentId, setFocusedRouteAgentId] = useState<string | null>(null);
+  const [fitBoundsTrigger, setFitBoundsTrigger] = useState<number>(0);
 
   // Expor função global para o tooltip do Leaflet acessar o estado do React
   useEffect(() => {
@@ -309,6 +310,7 @@ export function App() {
           onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
           onOpenShareLinkModal={() => setIsShareLinkOpen(true)}
           isHostingerConnected={isHostingerConnected}
+          onFitMapBounds={() => setFitBoundsTrigger(prev => prev + 1)}
         />
       )}
 
@@ -349,6 +351,7 @@ export function App() {
             objectives={filteredObjectives}
             flyToCoords={flyToCoords}
             statusFilter={statusFilter}
+            fitBoundsTrigger={fitBoundsTrigger}
           />
 
           <AgentSimulatorController
