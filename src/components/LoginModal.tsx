@@ -76,8 +76,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-sans"
-                placeholder="admin@vertice.com"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-sans"
               />
             </div>
           </div>
@@ -92,8 +91,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-sans"
-                placeholder="••••••••"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-sans"
               />
             </div>
           </div>
@@ -102,7 +100,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             type="submit"
             className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-blue-600 via-cyan-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all active:scale-98"
           >
-            <span>ENTRAR NO PAINEL ADM</span>
+            <span>ENTRAR</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -122,17 +120,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 rounded-lg text-xs font-bold font-mono transition-colors shadow-lg shadow-emerald-950/40"
           >
             <MessageSquare className="w-4 h-4 text-emerald-400" />
-            <span>CADASTRO DE AGENTE VIA WHATSAPP</span>
-          </button>
-
-          {/* Botão de Atalho para App do Agente */}
-          <button
-            type="button"
-            onClick={onSwitchToAgentView}
-            className="w-full flex items-center justify-center gap-2 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg text-xs font-mono transition-colors"
-          >
-            <Smartphone className="w-4 h-4 text-cyan-400" />
-            <span>VISUALIZAR TELA DO AGENTE (MOBILE)</span>
+            <span>CADASTRAR</span>
           </button>
         </div>
       </div>
