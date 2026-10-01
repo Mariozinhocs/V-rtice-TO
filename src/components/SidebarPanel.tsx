@@ -283,9 +283,9 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          agent.status === 'libre' ? 'bg-[#9aa3b3]' :
+                          agent.status === 'libre' ? 'bg-emerald-500' :
                           agent.status === 'caminho' ? 'bg-amber-500' :
-                          agent.status === 'atendimento' ? 'bg-emerald-500' : 'bg-red-500 animate-ping'
+                          agent.status === 'atendimento' ? 'bg-[#9aa3b3]' : 'bg-red-500 animate-ping'
                         }`} />
 
                         <div>
